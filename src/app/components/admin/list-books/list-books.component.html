@@ -1,0 +1,74 @@
+<section class="row mt-5">
+  <div class="col">
+
+    <button class="btn btn-success float-right mb-3" data-toggle="modal" data-target="#modalBook">
+      <i class="fas fa-book mr-1"></i>
+      New Book
+    </button>
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">N°</th>
+          <th scope="col">Title</th>
+          <!-- <th scope="col">Descripcion</th> -->
+          <th scope="col">Author</th>
+          <th scope="col">Lenguage</th>
+          <th scope="col">Price</th>
+          <th scope="col">Currency</th>
+          <th scope="col">Offer</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let book of books; index as i">
+          <th scope="row">{{i+1}}</th>
+          <td>{{book.titulo}}</td>
+          <!-- <td>{{book.descripcion}}</td> -->
+          <td>{{book.autor}}</td>
+          <td>{{book.idioma}}</td>
+          <td>{{book.precio}}</td>
+          <td>{{book.moneda}}</td>
+          <td>{{book.oferta === '1' ? 'Sí': 'No'}}</td>
+          <td *ngIf="book.userUid == userUid || isAdmin == true; else noOwner">
+            <button class="btn btn-success" data-toggle="modal" data-target="#modalBook"
+              (click)="onPreUpdateBook(book)">
+              <i class="fas fa-edit"></i>
+            </button>
+          </td>
+          <ng-template #noOwner>
+            <td>
+              <button class="btn btn-secondary" disabled="true">
+                <i class="fas fa-edit"></i>
+              </button>
+            </td>
+          </ng-template>
+          <td *ngIf="book.userUid == userUid || isAdmin == true; else noAdmin">
+            <button class="btn btn-danger text-center" (click)="onDeleteBook(book.id)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+          <ng-template #noAdmin>
+            <td>
+              <button class="btn btn-secondary" disabled="true">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </ng-template>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!books.length">
+      <div class="card text-white bg-danger mb-3 w-100 text-center">
+        <div class="card-body p-3">
+          <h4 class="card-title mb-0">There aren't books in the store currently</h4>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<app-modal [userUid]="userUid"></app-modal>
